@@ -36,25 +36,39 @@ const ListScreen: React.FC<Props> = () => {
         );
     };
 
+    const handleClearClick = () =>
+        setTasks(tasks => tasks.filter(task => !task.isComplete));
+
     console.log(tasks);
 
-return (
-    <div>
+    return (
         <div>
-            {tasks.map((task) => (
-                <div key={task.id}>
-                    <input
-                        type='checkbox'
-                        checked={task.isComplete}
-                        onChange={handleCompleteChange(task)}
-                    />
-                    {task.label}
-                </div>
-            ))}
+            <div>
+                {tasks.map((task) => (
+                    <div key={task.id}>
+                        <input
+                            type='checkbox'
+                            checked={task.isComplete}
+                            onChange={handleCompleteChange(task)}
+                        />
+                        {task.label}
+                    </div>
+                ))}
+            </div>
+            <input
+                value={newTaskLabel}
+                onChange={handleNewTskLabelChange}
+                onKeyPress={handleNewTaskKeyPress}
+            />
+            <div>
+                <button
+                    onClick={handleClearClick}
+                >
+                    Clear completed
+                </button>
+            </div>
         </div>
-        <input value={newTaskLabel} onChange={handleNewTskLabelChange} onKeyPress={handleNewTaskKeyPress} />
-    </div>
-);
+    );
 };
 
 export default ListScreen;
