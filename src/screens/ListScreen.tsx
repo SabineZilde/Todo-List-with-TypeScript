@@ -26,22 +26,35 @@ const ListScreen: React.FC<Props> = () => {
         };
     };
 
-    return (
+    const handleCompleteChange = (handledTask: Task) => (e: ChangeEvent<HTMLInputElement>) => {
+        setTasks((tasks) =>
+            tasks.map((task) => {
+                if (task.id === handledTask.id)
+                    return { ...task, isComplete: e.target.checked };
+                return task;
+            })
+        );
+    };
+
+    console.log(tasks);
+
+return (
+    <div>
         <div>
-            <div>
-                {tasks.map((task) => (
-                    <div key={task.id}>
-                        <input 
-                            type='checkbox'
-                            checked={task.isComplete}    
-                        />
-                        {task.label}
-                    </div>
-                ))}
-            </div>
-            <input value={newTaskLabel} onChange={handleNewTskLabelChange} onKeyPress={handleNewTaskKeyPress} />
+            {tasks.map((task) => (
+                <div key={task.id}>
+                    <input
+                        type='checkbox'
+                        checked={task.isComplete}
+                        onChange={handleCompleteChange(task)}
+                    />
+                    {task.label}
+                </div>
+            ))}
         </div>
-    );
+        <input value={newTaskLabel} onChange={handleNewTskLabelChange} onKeyPress={handleNewTaskKeyPress} />
+    </div>
+);
 };
 
 export default ListScreen;
