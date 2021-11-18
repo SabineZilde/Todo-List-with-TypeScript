@@ -1,25 +1,35 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes, NavLink } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
 import FocusScreen from './screens/FocusScreen';
 import ListScreen from './screens/ListScreen';
 import { Task } from './types';
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const tasksProps = {tasks, setTasks};
+
+  const updateTaskCompletion = (taskId: string, isComplete: boolean) => {
+    setTasks((tasks) =>
+      tasks.map((task) => {
+        if (task.id === taskId) return { ...task, isComplete };
+        return task;
+      })
+    );
+  };
+
+  const tasksApi = { tasks, setTasks, updateTaskCompletion };
 
   return (
     <BrowserRouter>
       <nav>
-        <NavLink to='/'>List</NavLink>
+        <NavLink exact to='/' activeStyle={{ fontWeight: 'bold' }}>List</NavLink>
         {' '}-{' '}
-        <NavLink to='focus'>Focus</NavLink>
+        <NavLink to='/focus' activeStyle={{ fontWeight: 'bold' }}>Focus</NavLink>
       </nav>
       <br />
-      <Routes>
-        <Route path='/' element={<ListScreen {...tasksProps} />} />
-        <Route path='focus' element={<FocusScreen {...tasksProps} />} />
-      </Routes>
+      <Switch>
+        <Route exact path='/'><ListScreen {...tasksApi} /></Route>
+        <Route path='/focus'><FocusScreen {...tasksApi} /></Route>
+      </Switch>
     </BrowserRouter>
   );
 }
