@@ -1,6 +1,39 @@
 import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 import { Task } from '../types';
 import useTaskStore from '../hooks/use-task-store';
+import styled from 'styled-components';
+import TextButton from '../components/TextButton';
+import Spacer from '../components/Spacer';
+import DeleteIcon from '../Icons/DeleteIcon';
+import IconButton from '../components/IconButton';
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 460px;
+`;
+
+const List = styled.div`
+    border-radius: 15px;
+    background: rgb(255, 255, 255, 0.1);
+    padding: 45px 24px;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ListItem = styled.label`
+    display: flex;
+    margin-bottom: 8px;
+`;
+
+const Input = styled.input`
+    background: rgb(0, 0, 0.5);
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    padding: 20px 24px;
+`;
 
 type Props = {};
 
@@ -11,7 +44,7 @@ const ListScreen: React.FC<Props> = () => {
         setTasks,
         updateTaskCompletion,
     } = useTaskStore();
-    
+
     const [newTaskLabel, setNewTaskLabel] = useState('');
 
     const handleNewTskLabelChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +54,7 @@ const ListScreen: React.FC<Props> = () => {
     const handleNewTaskKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && newTaskLabel !== '') {
             addTask({ label: newTaskLabel })
-                setNewTaskLabel('');
+            setNewTaskLabel('');
         };
     };
 
@@ -41,33 +74,37 @@ const ListScreen: React.FC<Props> = () => {
     console.log(tasks);
 
     return (
-        <div>
-            <div>
+        <Container>
+            <List>
                 {tasks.map((task) => (
-                    <div key={task.id}>
+                    <ListItem key={task.id}>
                         <input
                             type='checkbox'
                             checked={task.isComplete}
                             onChange={handleTaskCompleteChange(task)}
-                        />{' '}
+                        />
                         {task.label}
-                        <button onClick={handleTaskDeleteClick(task)}>Delete</button>
-                    </div>
+                        <Spacer flex={1} />
+                        <IconButton onClick={handleTaskDeleteClick(task)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItem>
                 ))}
-            </div>
-            <input
+            </List>
+            <Spacer height={30} />
+            <Input
                 value={newTaskLabel}
                 onChange={handleNewTskLabelChange}
                 onKeyPress={handleNewTaskKeyPress}
             />
-            <div>
-                <button
-                    onClick={handleClearClick}
-                >
-                    Clear completed
-                </button>
-            </div>
-        </div>
+            <Spacer height={45} />
+            <TextButton
+                onClick={handleClearClick}
+                style={{ alignSelf: 'center' }}
+            >
+                Clear completed
+            </TextButton>
+        </Container>
     );
 };
 
