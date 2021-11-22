@@ -1,13 +1,14 @@
-import { useState,useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import TaskContext from '../contexts/task-store';
 import { Task } from '../types';
 import { nanoid } from 'nanoid';
 import { shuffle } from 'lodash';
 
 const useTaskStore = () => {
-    const [tasks, setTasks] = useContext(TaskContext)
+    const [tasks, setTasks] = useContext(TaskContext);      
+
     const [focusedTaskId, setFocusedTaskId] = useState<string | undefined>(
-        undefined
+        tasks.filter(task => !task.isComplete)[0]?.id
     );
 
     const addTask = (task: Pick<Task, 'label'>) => {
@@ -29,6 +30,10 @@ const useTaskStore = () => {
     };
 
     const focusedTask = tasks.find((task) => task.id === focusedTaskId);
+
+    useEffect(() => {
+        if (focusedTask?.isComplete) setFocusedTaskId(tasks.filter(task => !task.isComplete)[0]?.id);
+    }, [tasks, focusedTask]);
 
     const shuffleFocusedTask = () => {
         setFocusedTaskId(
