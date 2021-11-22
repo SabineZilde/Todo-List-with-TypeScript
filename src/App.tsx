@@ -12,6 +12,8 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+  min-height: 100vh;
   padding: 35px;
 `;
 
