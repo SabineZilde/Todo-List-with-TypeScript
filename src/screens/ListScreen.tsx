@@ -24,7 +24,9 @@ const List = styled.div`
 
 const ListItem = styled.label`
     display: flex;
+    align-items: center;
     padding: 4px 0;
+    font-size: 18px;
 `;
 
 const DeleteButton = styled(IconButton)`
@@ -90,6 +92,7 @@ const ListScreen: React.FC<Props> = () => {
                             checked={task.isComplete}
                             onChange={handleTaskCompleteChange(task)}
                         />
+                        <Spacer width={24} />
                         {task.label}
                         <Spacer flex={1} />
                         <DeleteButton onClick={handleTaskDeleteClick(task)}>
@@ -100,6 +103,7 @@ const ListScreen: React.FC<Props> = () => {
             </List>
             <Spacer height={30} />
             <Input
+                placeholder='Add a task'
                 value={newTaskLabel}
                 onChange={handleNewTskLabelChange}
                 onKeyPress={handleNewTaskKeyPress}
