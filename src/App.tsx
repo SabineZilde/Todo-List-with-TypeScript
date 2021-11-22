@@ -6,10 +6,18 @@ import useLocalStorage from './hooks/use-local-storage';
 import { Task } from './types';
 import TaskContext from './contexts/task-store';
 import styled from 'styled-components';
-import { colors } from './styles';
+import { colors, GlobalStyle } from './styles';
+
+const Layout = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 35px;
+`;
 
 const Nav = styled.nav`
   display: flex;
+  margin-bottom: 45px;
 `;
 
 const TabButton = styled(NavLink)`
@@ -42,19 +50,23 @@ function App() {
   const [tasks, setTasks] = useLocalStorage<Task[]>('tasks', []);
 
   return (
-    <BrowserRouter>
-      <TaskContext.Provider value={[tasks, setTasks]}>
-        <Nav>
-          <TabButton exact to='/' activeClassName='active'>List</TabButton>
-          <TabButton to='/focus' activeClassName='active'>Focus</TabButton>
-        </Nav>
-        <br />
-        <Switch>
-          <Route exact path='/'><ListScreen /></Route>
-          <Route path='/focus'><FocusScreen /></Route>
-        </Switch>
-      </TaskContext.Provider>
-    </BrowserRouter>
+    <>
+      <GlobalStyle />
+      <BrowserRouter>
+        <TaskContext.Provider value={[tasks, setTasks]}>
+          <Layout>
+            <Nav>
+              <TabButton exact to='/' activeClassName='active'>List</TabButton>
+              <TabButton to='/focus' activeClassName='active'>Focus</TabButton>
+            </Nav>
+            <Switch>
+              <Route exact path='/'><ListScreen /></Route>
+              <Route path='/focus'><FocusScreen /></Route>
+            </Switch>
+          </Layout>
+        </TaskContext.Provider>
+      </BrowserRouter>
+    </>
   );
 }
 
